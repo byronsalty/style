@@ -20,14 +20,15 @@
 /* Brand colors theme - using Learning Style brand palette
    Primary Pink: #e68bbe (main brand color)
    Background: #fbfaf9 (main background)
+   Cards/Raised elements: #ffffff (pure white to match images)
    Secondary Blue: #305677 (small buttons, secondary actions) */
 @plugin "../vendor/daisyui-theme" {
   name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: #fbfaf9;
-  --color-base-200: #fbf2f3;
+  --color-base-100: #ffffff;
+  --color-base-200: #fbfaf9;
   --color-base-300: #f0e5e7;
   --color-base-content: #171717;
   --color-primary: #e68bbe;
@@ -68,6 +69,11 @@
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
 /* This file is for your main application CSS */
+
+/* Body background with brand color */
+body {
+  background-color: #fbfaf9;
+}
 
 /* Quiz Styles */
 .quiz-container {

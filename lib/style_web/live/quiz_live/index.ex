@@ -25,6 +25,12 @@ defmodule StyleWeb.QuizLive.Index do
     ~H"""
     <div class="quiz-container">
       <div class="quiz-intro">
+        <img
+          src="https://doy9nvc9lu50w.cloudfront.net/begin.png"
+          alt="What's Your Study Style?"
+          style="max-width: 100%; height: auto; border-radius: 1rem; margin-bottom: 2rem; background: white; padding: 1rem;"
+        />
+
         <h1>What's Your Study Style?</h1>
         <p class="subtitle">Discover your learning style in under 2 minutes</p>
 

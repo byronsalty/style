@@ -31,16 +31,18 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+  #maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
   maybe_ipv6 = []
 
   config :style, Style.Repo,
     url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "2"),
     socket_options: maybe_ipv6,
     pool_timeout: 60_000,
     ownership_timeout: 60_000,
     timeout: 60_000,
+    queue_target: 1000,
+    queue_interval: 5000,
     ssl: [
       cacerts: :public_key.cacerts_get()
     ]

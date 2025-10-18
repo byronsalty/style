@@ -15,48 +15,64 @@ defmodule StyleWeb.QuizFlowTest do
       {:ok, index_live, _html} = live(conn, "/")
       assert has_element?(index_live, "h1", "What's Your Study Style?")
 
-      # 2. Click "Start Quiz"
-      {:ok, quiz_live, _html} = index_live |> element("button", "Start Quiz") |> render_click() |> follow_redirect(conn)
+      # 2. Click "Start Quiz" and follow redirect to question page
+      {:ok, quiz_live, _html} =
+        index_live
+        |> element("button", "Start Quiz")
+        |> render_click()
+        |> follow_redirect(conn)
 
       # 3. Answer all 6 questions
-      for position <- 1..6 do
+      Enum.reduce(1..6, quiz_live, fn position, current_live ->
         # Should see the question
-        assert has_element?(quiz_live, ".question-card")
-        assert has_element?(quiz_live, "div", "Question #{position} of 6")
+        assert has_element?(current_live, ".question-card")
+        assert has_element?(current_live, "div", "Question #{position} of 6")
 
-        # Select first answer option (A)
-        quiz_live
-        |> element(".answer-option", "A")
+        # Select first answer option (the button with label "A")
+        current_live
+        |> element("button.answer-option", "A")
         |> render_click()
 
-        # Click next (or last question button)
+        # Click next and follow redirect
         if position < 6 do
-          quiz_live = quiz_live |> element("button", "Next") |> render_click()
+          {:ok, next_live, _html} =
+            current_live
+            |> element("button", "Next")
+            |> render_click()
+            |> follow_redirect(conn)
+          next_live
         else
-          quiz_live = quiz_live |> element("button", "Continue") |> render_click()
+          {:ok, email_live, _html} =
+            current_live
+            |> element("button", "Continue")
+            |> render_click()
+            |> follow_redirect(conn)
+          email_live
         end
-      end
+      end)
+      |> then(fn email_live ->
+        # 4. Should now see email capture form
+        assert has_element?(email_live, "h1", "You're almost there!")
+        assert has_element?(email_live, "input[name='email[email]']")
 
-      # 4. Should now see email capture form
-      assert has_element?(quiz_live, "h1", "You're almost there!")
-      assert has_element?(quiz_live, "input[name='email[email]']")
+        # 5. Submit email
+        {:ok, _result_live, _html} =
+          email_live
+          |> form(".email-form", email: %{email: "test@example.com", opt_in_courses: "true", opt_in_all_communications: "true"})
+          |> render_submit()
+          |> follow_redirect(conn)
 
-      # 5. Submit email
-      quiz_live
-      |> form(".email-form", email: %{email: "test@example.com"})
-      |> render_submit()
+        # 6. Verify lead was saved to database
+        lead = Style.Repo.one(Style.Quiz.Lead)
+        assert lead.email == "test@example.com"
+        assert lead.learning_style_slug != nil
+        assert lead.opt_in_courses == true
+        assert lead.opt_in_all_communications == true
 
-      # 6. Should redirect to results
-      assert_redirected(quiz_live, ~p"/result")
-
-      # 7. Verify lead was saved to database
-      lead = Style.Repo.one(Style.Quiz.Lead)
-      assert lead.email == "test@example.com"
-      assert lead.learning_style_slug != nil
-
-      # 8. Verify quiz responses were saved
-      responses = Style.Repo.all(Style.Quiz.QuizResponse)
-      assert length(responses) == 6
+        # 7. Verify quiz responses were saved
+        responses = Style.Repo.all(Style.Quiz.QuizResponse)
+        assert length(responses) == 6
+      end)
     end
   end
 end

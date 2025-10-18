@@ -47,47 +47,36 @@ defmodule StyleWeb.QuizLive.Result do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="quiz-container" style="background: #2d3748; min-height: 100vh; padding: 2rem;">
+    <div class="quiz-container">
       <div
         class="result-card"
         phx-hook="QuizCompleted"
         id="result-card"
         data-learning-style={@learning_style.slug}
-        style="background: #2d3748; max-width: 1000px; margin: 0 auto; text-align: center; padding: 3rem 2rem;"
       >
-        <div class="result-header">
-          <p style="font-size: 1.5rem; color: #9ca3af; margin-bottom: 1.5rem; font-weight: 400;">
+        <div class="result-header" style="text-align: center;">
+          <p style="font-size: 1.5rem; color: #986186; margin-bottom: 1.5rem; font-weight: 400;">
             Your learning style is...
           </p>
-          <h1 style="font-size: 4rem; font-weight: bold; margin-bottom: 1.5rem; color: #1e3a5f; line-height: 1.2;">
+          <h1 style="font-size: 4rem; font-weight: bold; margin-bottom: 1.5rem; color: #e68bbe; line-height: 1.2;">
             {@learning_style.name}
           </h1>
-          <p style="font-size: 1.25rem; color: #e5e7eb; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+          <p class="result-description" style="font-size: 1.25rem;">
             {@learning_style.description}
           </p>
         </div>
 
-        <div style="border-top: 1px solid #4b5563; padding-top: 3rem; margin-bottom: 3rem;">
-          <h3 style="font-size: 1.5rem; font-weight: bold; color: #ffffff; margin-bottom: 2rem; text-align: left;">
-            Study Tips for You:
-          </h3>
-          <ul style="list-style: none; padding: 0; text-align: left;">
+        <div class="result-tips">
+          <h3>Study Tips for You:</h3>
+          <ul>
             <%= for tip <- @learning_style.tips do %>
-              <li style="font-size: 1.125rem; color: #e5e7eb; margin-bottom: 1.25rem; padding-left: 1.5rem; position: relative;">
-                <span style="position: absolute; left: 0; color: #6366f1;">•</span>
-                {tip}
-              </li>
+              <li>{tip}</li>
             <% end %>
           </ul>
         </div>
 
-        <div style="border-top: 1px solid #4b5563; padding-top: 3rem;">
-          <button
-            phx-click="retake_quiz"
-            style="background: #6366f1; color: white; font-size: 1.125rem; font-weight: 600; padding: 0.875rem 2rem; border-radius: 8px; border: none; cursor: pointer; transition: background 0.2s;"
-            onmouseover="this.style.background='#5558e3'"
-            onmouseout="this.style.background='#6366f1'"
-          >
+        <div class="result-actions">
+          <button phx-click="retake_quiz" class="btn btn-secondary">
             Retake Quiz
           </button>
         </div>

@@ -1,4 +1,18 @@
-# Style
+# Learning Style
+
+## Brand Colors
+
+| Color Name | Hex Code | Usage |
+|------------|----------|-------|
+| **Primary Pink** | `#e68bbe` | Main brand color - buttons, cards, primary actions |
+| **Primary Pink Dark** | `#d478a7` | Hover state for primary pink elements |
+| **Background** | `#fbfaf9` | Main background color (matches logo) |
+| **Background Contrast** | `#fbf2f3` | Slightly darker background for sections needing contrast |
+| **Secondary Blue** | `#305677` | Small buttons, secondary actions |
+| **Footer Background** | `#171717` | Footer background color |
+| **Footer Text** | `#986186` | Footer text color |
+
+## Developer Notes
 
 To start your Phoenix server:
 

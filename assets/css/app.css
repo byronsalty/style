@@ -103,3 +103,178 @@
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
 /* This file is for your main application CSS */
+
+/* Quiz Styles */
+.quiz-container {
+  @apply max-w-2xl mx-auto p-6 min-h-screen flex flex-col justify-center;
+}
+
+.quiz-intro {
+  @apply text-center space-y-6 bg-base-100 p-8 rounded-box shadow-lg;
+}
+
+.quiz-intro h1 {
+  @apply text-4xl font-bold text-primary mb-2;
+}
+
+.quiz-intro .subtitle {
+  @apply text-lg text-base-content/70;
+}
+
+.quiz-intro .intro-content {
+  @apply text-left max-w-md mx-auto;
+}
+
+.quiz-intro .intro-content p {
+  @apply mb-3 text-base-content/80;
+}
+
+.quiz-intro .intro-content ul {
+  @apply space-y-2 ml-4;
+}
+
+.quiz-intro .intro-content li {
+  @apply text-base-content/90;
+}
+
+.btn-large {
+  @apply btn-lg mt-6;
+}
+
+/* Progress Bar */
+.quiz-progress {
+  @apply mb-6;
+}
+
+.progress-text {
+  @apply text-center text-sm font-medium text-base-content/70 mb-2;
+}
+
+.progress-bar {
+  @apply w-full h-2 bg-base-300 rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-primary transition-all duration-300;
+}
+
+/* Question Card */
+.question-card {
+  @apply bg-base-100 p-8 rounded-box shadow-lg space-y-6;
+}
+
+.question-text {
+  @apply text-2xl font-semibold text-base-content mb-6;
+}
+
+/* Answer Options */
+.answer-options {
+  @apply space-y-3;
+}
+
+.answer-option {
+  @apply w-full p-4 text-left border-2 border-base-300 rounded-box hover:border-primary hover:bg-primary/5 transition-all cursor-pointer flex items-start gap-3;
+}
+
+.answer-option.selected {
+  @apply border-primary bg-primary/10 ring-2 ring-primary/20;
+}
+
+.answer-label {
+  @apply font-bold text-primary text-lg flex-shrink-0 w-8;
+}
+
+.answer-text {
+  @apply text-base-content flex-1;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  @apply flex justify-between gap-4 mt-6;
+}
+
+.navigation-buttons .btn {
+  @apply flex-1;
+}
+
+/* Result Card */
+.result-card {
+  @apply bg-base-100 p-8 rounded-box shadow-lg space-y-6;
+}
+
+.result-header {
+  @apply text-center pb-6 border-b border-base-300;
+}
+
+.result-header h1 {
+  @apply text-3xl font-bold text-primary mb-3;
+}
+
+.result-description {
+  @apply text-lg text-base-content/80;
+}
+
+.result-tips {
+  @apply space-y-3;
+}
+
+.result-tips h3 {
+  @apply text-xl font-semibold text-base-content mb-3;
+}
+
+.result-tips ul {
+  @apply space-y-2 ml-6 list-disc;
+}
+
+.result-tips li {
+  @apply text-base-content/90;
+}
+
+.result-actions {
+  @apply flex justify-center pt-6 border-t border-base-300;
+}
+
+/* Email Capture */
+.email-card {
+  @apply bg-base-100 p-8 rounded-box shadow-lg max-w-md mx-auto space-y-6;
+}
+
+.email-header {
+  @apply text-center space-y-2;
+}
+
+.email-header h1 {
+  @apply text-3xl font-bold text-primary;
+}
+
+.email-subtitle {
+  @apply text-base text-base-content/80;
+}
+
+.email-form {
+  @apply space-y-4;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-base-content;
+}
+
+.form-input {
+  @apply w-full px-4 py-3 border-2 border-base-300 rounded-box focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all;
+}
+
+.form-error {
+  @apply text-error text-sm mt-1;
+}
+
+.btn-block {
+  @apply w-full;
+}
+
+.privacy-note {
+  @apply text-xs text-center text-base-content/60 mt-4;
+}

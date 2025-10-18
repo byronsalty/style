@@ -49,6 +49,16 @@ defmodule StyleWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
+
+  # CORS configuration for quiz frontend
+  plug CORSPlug,
+    origin: [
+      "http://localhost:5173",
+      "https://quiz.margaretsalty.com"
+    ],
+    headers: ["Authorization", "Content-Type", "Accept"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+
   plug Plug.Session, @session_options
   plug StyleWeb.Router
 end

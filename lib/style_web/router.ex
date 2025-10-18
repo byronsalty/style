@@ -14,16 +14,28 @@ defmodule StyleWeb.Router do
     plug :accepts, ["json"]
   end
 
+  # Quiz routes - Phoenix LiveView
   scope "/", StyleWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", QuizLive.Index, :index
+    live "/quiz/:session_id", QuizLive.Question, :show
+    live "/result/:session_id", QuizLive.Result, :show
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", StyleWeb do
-  #   pipe_through :api
-  # end
+  # Admin routes
+  scope "/admin", StyleWeb do
+    pipe_through :browser
+
+    live "/reports", AdminLive.Reports, :index
+  end
+
+  # API routes (for health checks, etc.)
+  scope "/api/v1", StyleWeb do
+    pipe_through :api
+
+    get "/health", QuizController, :health
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:style, :dev_routes) do

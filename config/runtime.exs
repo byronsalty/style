@@ -21,6 +21,9 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
+  # Google Analytics 4 tracking ID for production
+  config :style, ga_tracking_id: System.get_env("GA_TRACKING_ID")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """
@@ -29,14 +32,18 @@ if config_env() == :prod do
       """
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+  maybe_ipv6 = []
 
   config :style, Style.Repo,
-    # ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    # For machines with several cores, consider starting multiple pools of `pool_size`
-    # pool_count: 4,
-    socket_options: maybe_ipv6
+    socket_options: maybe_ipv6,
+    pool_timeout: 60_000,
+    ownership_timeout: 60_000,
+    timeout: 60_000,
+    ssl: [
+      cacerts: :public_key.cacerts_get()
+    ]
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

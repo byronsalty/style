@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
+# Supports both local Postgres and Neon via DATABASE_URL
 config :style, Style.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "style_dev",
+  url:
+    System.get_env("DATABASE_URL") ||
+      "postgresql://postgres:postgres@localhost:5632/style_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -86,3 +86,6 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# Google Analytics 4 tracking ID (optional for dev)
+config :style, ga_tracking_id: System.get_env("GA_TRACKING_ID")

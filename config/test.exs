@@ -10,6 +10,7 @@ config :style, Style.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "style_test#{System.get_env("MIX_TEST_PARTITION")}",
+  port: 5633,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

@@ -1,0 +1,440 @@
+openapi: 3.0.3
+info:
+  title: Learning Style Quiz API
+  version: 1.0.0
+  description: |
+    JSON API for the Learning Style Quiz application. Provides quiz content
+    (questions, answers, learning styles) and optional submission tracking for analytics.
+
+    This API serves a React SPA frontend hosted on quiz.margaretsalty.com.
+  contact:
+    name: Style Team
+    email: support@margaretsalty.com
+
+servers:
+  - url: https://quiz.margaretsalty.com/api/v1
+    description: Production server
+  - url: http://localhost:4000/api/v1
+    description: Local development server
+
+paths:
+  /quiz/content:
+    get:
+      summary: Get quiz content
+      description: |
+        Fetches all quiz content needed for the frontend:
+        - 6 questions in order (with their 4 answer options each)
+        - 4 learning style definitions (name, description, tips)
+
+        This endpoint is called once when the quiz app loads. Response can be cached.
+      operationId: getQuizContent
+      tags:
+        - Quiz
+      responses:
+        '200':
+          description: Quiz content successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizContent'
+              example:
+                questions:
+                  - id: "550e8400-e29b-41d4-a716-446655440001"
+                    position: 1
+                    text: "When you sit down to study, what helps you focus most?"
+                    answer_options:
+                      - id: "550e8400-e29b-41d4-a716-446655440101"
+                        label: "A"
+                        text: "Watching videos or tutorials"
+                        learning_style_slug: "visual-learner"
+                      - id: "550e8400-e29b-41d4-a716-446655440102"
+                        label: "B"
+                        text: "Talking things out with others"
+                        learning_style_slug: "verbal-processor"
+                      - id: "550e8400-e29b-41d4-a716-446655440103"
+                        label: "C"
+                        text: "Making lists and diagrams"
+                        learning_style_slug: "structured-planner"
+                      - id: "550e8400-e29b-41d4-a716-446655440104"
+                        label: "D"
+                        text: "Highlighting and re-reading notes"
+                        learning_style_slug: "memorizer"
+                learning_styles:
+                  - id: "550e8400-e29b-41d4-a716-446655440201"
+                    name: "Visual Learner"
+                    slug: "visual-learner"
+                    description: "Loves diagrams, color-coded notes, and video content."
+                    tips:
+                      - "Use our video modules and domain one-pagers to map it out"
+                      - "Create visual aids like mind maps and flowcharts"
+                      - "Color-code your notes by topic or concept"
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/submissions:
+    post:
+      summary: Submit quiz completion
+      description: |
+        Records a quiz submission for analytics tracking (optional).
+
+        The frontend calculates the result client-side, but can optionally
+        send the submission to the backend for:
+        - Analytics (result distribution, completion times)
+        - Shareable result links (P3 feature)
+        - Lead generation tracking
+
+        Returns the submission ID which can be used for shareable result links.
+      operationId: createSubmission
+      tags:
+        - Quiz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequest'
+            example:
+              learning_style_slug: "visual-learner"
+              answers:
+                "550e8400-e29b-41d4-a716-446655440001": "550e8400-e29b-41d4-a716-446655440101"
+                "550e8400-e29b-41d4-a716-446655440002": "550e8400-e29b-41d4-a716-446655440205"
+                "550e8400-e29b-41d4-a716-446655440003": "550e8400-e29b-41d4-a716-446655440309"
+                "550e8400-e29b-41d4-a716-446655440004": "550e8400-e29b-41d4-a716-446655440413"
+                "550e8400-e29b-41d4-a716-446655440005": "550e8400-e29b-41d4-a716-446655440517"
+                "550e8400-e29b-41d4-a716-446655440006": "550e8400-e29b-41d4-a716-446655440621"
+              metadata:
+                completion_time_seconds: 87
+                user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)..."
+      responses:
+        '201':
+          description: Submission successfully recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+              example:
+                id: "650e8400-e29b-41d4-a716-446655440999"
+                learning_style:
+                  id: "550e8400-e29b-41d4-a716-446655440201"
+                  name: "Visual Learner"
+                  slug: "visual-learner"
+                  description: "Loves diagrams, color-coded notes, and video content."
+                  tips:
+                    - "Use our video modules and domain one-pagers to map it out"
+                    - "Create visual aids like mind maps and flowcharts"
+                    - "Color-code your notes by topic or concept"
+                completed_at: "2025-10-17T14:30:00Z"
+                share_url: "https://quiz.margaretsalty.com/results/650e8400-e29b-41d4-a716-446655440999"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/results/{submissionId}:
+    get:
+      summary: Get shareable result (P3 feature)
+      description: |
+        Retrieves a previously submitted quiz result by its ID for sharing.
+
+        This endpoint enables:
+        - Shareable result links
+        - Users revisiting their past results
+        - Social media sharing with preview metadata
+
+        Note: This is a Priority 3 feature and may not be in initial release.
+      operationId: getResult
+      tags:
+        - Quiz
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The submission ID returned when quiz was completed
+      responses:
+        '200':
+          description: Result successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+              example:
+                id: "650e8400-e29b-41d4-a716-446655440999"
+                learning_style:
+                  name: "Visual Learner"
+                  slug: "visual-learner"
+                  description: "Loves diagrams, color-coded notes, and video content."
+                  tips:
+                    - "Use our video modules and domain one-pagers to map it out"
+                    - "Create visual aids like mind maps and flowcharts"
+                    - "Color-code your notes by topic or concept"
+                completed_at: "2025-10-17T14:30:00Z"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /health:
+    get:
+      summary: Health check
+      description: Returns server health status for monitoring
+      operationId: healthCheck
+      tags:
+        - System
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  timestamp:
+                    type: string
+                    format: date-time
+              example:
+                status: "ok"
+                timestamp: "2025-10-17T14:30:00Z"
+
+components:
+  schemas:
+    QuizContent:
+      type: object
+      required:
+        - questions
+        - learning_styles
+      properties:
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          minItems: 6
+          maxItems: 6
+          description: Array of 6 questions in order
+        learning_styles:
+          type: array
+          items:
+            $ref: '#/components/schemas/LearningStyle'
+          minItems: 4
+          maxItems: 4
+          description: Array of 4 learning style definitions
+
+    Question:
+      type: object
+      required:
+        - id
+        - position
+        - text
+        - answer_options
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique question identifier
+        position:
+          type: integer
+          minimum: 1
+          maximum: 6
+          description: Question order (1-6)
+        text:
+          type: string
+          description: Question text displayed to user
+        answer_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerOption'
+          minItems: 4
+          maxItems: 4
+          description: Array of 4 answer choices (A-D)
+
+    AnswerOption:
+      type: object
+      required:
+        - id
+        - label
+        - text
+        - learning_style_slug
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique answer identifier
+        label:
+          type: string
+          enum: [A, B, C, D]
+          description: Answer label
+        text:
+          type: string
+          description: Answer text displayed to user
+        learning_style_slug:
+          type: string
+          description: Learning style this answer maps to
+
+    LearningStyle:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - description
+        - tips
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique learning style identifier
+        name:
+          type: string
+          description: Learning style name
+          example: "Visual Learner"
+        slug:
+          type: string
+          description: URL-friendly identifier
+          example: "visual-learner"
+        description:
+          type: string
+          description: Short description of the learning style
+        tips:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 3
+          description: Study tips specific to this learning style
+
+    SubmissionRequest:
+      type: object
+      required:
+        - learning_style_slug
+        - answers
+      properties:
+        learning_style_slug:
+          type: string
+          description: The calculated learning style result (client-side)
+          example: "visual-learner"
+        answers:
+          type: object
+          description: Map of question ID to selected answer ID
+          additionalProperties:
+            type: string
+            format: uuid
+          example:
+            "550e8400-e29b-41d4-a716-446655440001": "550e8400-e29b-41d4-a716-446655440101"
+        metadata:
+          type: object
+          description: Optional metadata (completion time, user agent, referrer, etc.)
+          additionalProperties: true
+          example:
+            completion_time_seconds: 87
+            user_agent: "Mozilla/5.0..."
+
+    SubmissionResponse:
+      type: object
+      required:
+        - id
+        - learning_style
+        - completed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Submission ID (for shareable links)
+        learning_style:
+          $ref: '#/components/schemas/LearningStyle'
+        completed_at:
+          type: string
+          format: date-time
+          description: When the quiz was completed
+        share_url:
+          type: string
+          format: uri
+          description: Shareable result URL (P3 feature)
+
+    ResultResponse:
+      type: object
+      required:
+        - id
+        - learning_style
+        - completed_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        learning_style:
+          $ref: '#/components/schemas/LearningStyle'
+        completed_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error context (validation errors, etc.)
+          additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Invalid request (missing required fields, malformed JSON, etc.)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Invalid request"
+            details:
+              message: "Missing required field: learning_style_slug"
+
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Validation failed"
+            details:
+              answers: "must contain exactly 6 question-answer pairs"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Result not found"
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Internal server error"
+            details:
+              message: "An unexpected error occurred"
+
+  securitySchemes: {}
+
+security: []
+
+tags:
+  - name: Quiz
+    description: Quiz content and submission endpoints
+  - name: System
+    description: System health and monitoring endpoints

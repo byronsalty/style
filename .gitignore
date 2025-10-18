@@ -31,7 +31,31 @@ style-*.tar
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
 
+# Ignore built quiz assets (generated from assets/quiz)
+/priv/static/quiz/
+
+# Ignore React quiz experiment
+/assets/quiz/
+
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
 /assets/node_modules/
+/assets/quiz/node_modules/
+/assets/quiz/dist/
+/assets/quiz/build/
+*.log
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Testing
+/assets/quiz/coverage/
+
+.env.prod

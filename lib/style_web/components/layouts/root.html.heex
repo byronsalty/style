@@ -10,6 +10,17 @@
     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
     </script>
+    <%= if ga_tracking_id = Application.get_env(:style, :ga_tracking_id) do %>
+      <!-- Google Analytics 4 -->
+      <script async src={"https://www.googletagmanager.com/gtag/js?id=#{ga_tracking_id}"}>
+      </script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ga_tracking_id %>');
+      </script>
+    <% end %>
     <script>
       (() => {
         const setTheme = (theme) => {

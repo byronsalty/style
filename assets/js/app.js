@@ -25,11 +25,42 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/style"
 import topbar from "../vendor/topbar"
 
+// Google Analytics 4 helper function
+function trackEvent(eventName, eventParams = {}) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', eventName, eventParams);
+  }
+}
+
+// Analytics hooks for quiz tracking
+const analyticsHooks = {
+  QuizStarted: {
+    mounted() {
+      this.el.addEventListener("click", () => {
+        trackEvent("quiz_started");
+      });
+    }
+  },
+  QuestionAnswered: {
+    mounted() {
+      this.handleEvent("question_answered", ({ position }) => {
+        trackEvent("question_answered", { question_number: position });
+      });
+    }
+  },
+  QuizCompleted: {
+    mounted() {
+      const learningStyle = this.el.dataset.learningStyle;
+      trackEvent("quiz_completed", { learning_style: learningStyle });
+    }
+  }
+};
+
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...colocatedHooks, ...analyticsHooks},
 })
 
 // Show progress bar on live navigation and form submits

@@ -42,8 +42,10 @@
       })();
     </script>
   </head>
-  <body>
-    {@inner_content}
+  <body class="flex flex-col min-h-screen">
+    <main class="flex-1">
+      {@inner_content}
+    </main>
     <footer>
       <div class="shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)] h-2 bg-brand-footer">
       </div>
@@ -51,7 +53,7 @@
         <div class="container mx-auto px-4 py-6">
           <div class="text-center text-sm space-y-2 text-brand-footer-text">
             <div>
-              © {DateTime.utc_now().year} ExamPrep. All rights reserved.
+              © {DateTime.utc_now().year} Style Quiz. All rights reserved.
             </div>
             <div>
               by

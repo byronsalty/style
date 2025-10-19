@@ -75,6 +75,15 @@ body {
   background-color: #fbfaf9;
 }
 
+/* Footer brand colors */
+.bg-brand-footer {
+  background-color: #171717;
+}
+
+.text-brand-footer-text {
+  color: #986186;
+}
+
 /* Quiz Styles */
 .quiz-container {
   @apply max-w-2xl mx-auto p-6 min-h-screen flex flex-col justify-center;

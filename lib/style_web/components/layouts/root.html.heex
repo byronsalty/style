@@ -7,6 +7,7 @@
     <.live_title default="Style" suffix="">
       {assigns[:page_title]}
     </.live_title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
     </script>
@@ -43,5 +44,28 @@
   </head>
   <body>
     {@inner_content}
+    <footer>
+      <div class="shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1),0_-2px_4px_-1px_rgba(0,0,0,0.06)] h-2 bg-brand-footer">
+      </div>
+      <div class="bg-brand-footer">
+        <div class="container mx-auto px-4 py-6">
+          <div class="text-center text-sm space-y-2 text-brand-footer-text">
+            <div>
+              © {DateTime.utc_now().year} ExamPrep. All rights reserved.
+            </div>
+            <div>
+              by
+              <a
+                href="https://margaretsalty.com/"
+                target="_blank"
+                class="text-brand-footer-text hover:opacity-80 transition-opacity"
+              >
+                Margaret Salty
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

@@ -24,6 +24,12 @@ defmodule StyleWeb.QuizLive.Index do
   def render(assigns) do
     ~H"""
     <div class="quiz-container">
+      <img
+        src="https://doy9nvc9lu50w.cloudfront.net/ms_logo_rect.png"
+        alt="MS Logo"
+        style="max-width: 200px; height: auto; margin: 0 auto; display: block;"
+      />
+
       <div class="quiz-intro">
         <img
           src="https://doy9nvc9lu50w.cloudfront.net/begin.png"
@@ -33,16 +39,6 @@ defmodule StyleWeb.QuizLive.Index do
 
         <h1>What's Your Study Style?</h1>
         <p class="subtitle">Discover your learning style in under 2 minutes</p>
-
-        <div class="intro-content">
-          <p>Take this quick quiz to find out if you're a:</p>
-          <ul>
-            <li><strong>Visual Learner</strong> - Loves diagrams and color-coded notes</li>
-            <li><strong>Verbal Processor</strong> - Learns by speaking and teaching</li>
-            <li><strong>Structured Planner</strong> - Needs clarity and order</li>
-            <li><strong>Memorizer</strong> - Repetition and flashcards work best</li>
-          </ul>
-        </div>
 
         <button
           phx-click="start_quiz"

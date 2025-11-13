@@ -61,3 +61,5 @@ npm-debug.log
 /assets/quiz/coverage/
 
 .env.prod
+
+dev/sh/*_prod.sh

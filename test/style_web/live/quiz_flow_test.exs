@@ -40,6 +40,7 @@ defmodule StyleWeb.QuizFlowTest do
             |> element("button", "Next")
             |> render_click()
             |> follow_redirect(conn)
+
           next_live
         else
           {:ok, email_live, _html} =
@@ -47,6 +48,7 @@ defmodule StyleWeb.QuizFlowTest do
             |> element("button", "Continue")
             |> render_click()
             |> follow_redirect(conn)
+
           email_live
         end
       end)
@@ -58,7 +60,13 @@ defmodule StyleWeb.QuizFlowTest do
         # 5. Submit email
         {:ok, _result_live, _html} =
           email_live
-          |> form(".email-form", email: %{email: "test@example.com", opt_in_courses: "true", opt_in_all_communications: "true"})
+          |> form(".email-form",
+            email: %{
+              email: "test@example.com",
+              opt_in_courses: "true",
+              opt_in_all_communications: "true"
+            }
+          )
           |> render_submit()
           |> follow_redirect(conn)
 

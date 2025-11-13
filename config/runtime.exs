@@ -31,7 +31,7 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  #maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+  # maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
   maybe_ipv6 = []
 
   config :style, Style.Repo,
@@ -74,13 +74,7 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
-    secret_key_base: secret_key_base,
-    check_origin: [
-      "https://quiz.margaretsalty.com",
-      "https://margaretsalty.com",
-      "//quiz.margaretsalty.com",
-      "//margaretsalty.com"
-    ]
+    secret_key_base: secret_key_base
 
   # ## SSL Support
   #

@@ -249,7 +249,7 @@ defmodule StyleWeb.QuizLive.Question do
                 autofocus
               />
               <%= if assigns[:error] do %>
-                <p class="form-error"><%= @error %></p>
+                <p class="form-error">{@error}</p>
               <% end %>
             </div>
 

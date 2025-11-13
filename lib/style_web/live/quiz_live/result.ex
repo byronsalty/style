@@ -40,6 +40,7 @@ defmodule StyleWeb.QuizLive.Result do
 
   defp get_style_image(slug) do
     base_url = "https://doy9nvc9lu50w.cloudfront.net/"
+
     case slug do
       "visual-learner" -> base_url <> "type_visual.png"
       "verbal-processor" -> base_url <> "type_auditory.png"
@@ -88,7 +89,7 @@ defmodule StyleWeb.QuizLive.Result do
         </div>
 
         <div class="result-tips">
-          <h3>Study Tips for You:</h3>
+          <h3>💡 How Exam Mastery supports you:</h3>
           <ul>
             <%= for tip <- @learning_style.tips do %>
               <li>{tip}</li>

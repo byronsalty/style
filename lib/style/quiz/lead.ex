@@ -23,7 +23,13 @@ defmodule Style.Quiz.Lead do
   @doc false
   def changeset(lead, attrs) do
     lead
-    |> cast(attrs, [:email, :learning_style_slug, :metadata, :opt_in_courses, :opt_in_all_communications])
+    |> cast(attrs, [
+      :email,
+      :learning_style_slug,
+      :metadata,
+      :opt_in_courses,
+      :opt_in_all_communications
+    ])
     |> validate_required([:email, :learning_style_slug])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
     |> validate_length(:email, max: 255)

@@ -32,10 +32,17 @@ defmodule StyleWeb.AdminLive.Reports do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="admin-container" style="padding: 2rem; max-width: 1400px; margin: 0 auto; background: #ffffff; min-height: 100vh;">
+    <div
+      class="admin-container"
+      style="padding: 2rem; max-width: 1400px; margin: 0 auto; background: #ffffff; min-height: 100vh;"
+    >
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <h1 style="font-size: 2rem; font-weight: bold; color: #111827;">Quiz Signups Report</h1>
-        <button phx-click="refresh" class="btn btn-secondary" style="background: #6366f1; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600;">
+        <button
+          phx-click="refresh"
+          class="btn btn-secondary"
+          style="background: #6366f1; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600;"
+        >
           Refresh
         </button>
       </div>
@@ -45,21 +52,33 @@ defmodule StyleWeb.AdminLive.Reports do
           <table style="width: 100%; border-collapse: collapse;">
             <thead>
               <tr style="background: #f3f4f6; border-bottom: 2px solid #e5e7eb;">
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">Email</th>
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">Learning Style</th>
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">Courses Opt-in</th>
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">All Comms Opt-in</th>
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">Completed At</th>
-                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">Responses</th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  Email
+                </th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  Learning Style
+                </th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  Courses Opt-in
+                </th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  All Comms Opt-in
+                </th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  Completed At
+                </th>
+                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #111827;">
+                  Responses
+                </th>
               </tr>
             </thead>
             <tbody>
               <%= for lead <- @leads do %>
                 <tr style="border-bottom: 1px solid #e5e7eb;">
-                  <td style="padding: 1rem; color: #111827;"><%= lead.email %></td>
+                  <td style="padding: 1rem; color: #111827;">{lead.email}</td>
                   <td style="padding: 1rem;">
                     <span style="background: #dbeafe; color: #1e40af; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem;">
-                      <%= format_learning_style(lead.learning_style_slug) %>
+                      {format_learning_style(lead.learning_style_slug)}
                     </span>
                   </td>
                   <td style="padding: 1rem;">
@@ -77,18 +96,18 @@ defmodule StyleWeb.AdminLive.Reports do
                     <% end %>
                   </td>
                   <td style="padding: 1rem; font-size: 0.875rem; color: #6b7280;">
-                    <%= format_datetime(lead.metadata["quiz_completed_at"]) %>
+                    {format_datetime(lead.metadata["quiz_completed_at"])}
                   </td>
                   <td style="padding: 1rem;">
                     <details>
                       <summary style="cursor: pointer; color: #2563eb; font-weight: 500;">
-                        View Answers (<%= length(lead.quiz_responses) %>)
+                        View Answers ({length(lead.quiz_responses)})
                       </summary>
                       <div style="margin-top: 0.5rem; padding: 0.5rem; background: #f9fafb; border-radius: 4px; color: #374151;">
                         <%= for response <- Enum.sort_by(lead.quiz_responses, & &1.question.position) do %>
                           <div style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #374151;">
-                            <strong style="color: #111827;">Q<%= response.question.position %>:</strong>
-                            <%= response.answer_option.label %>. <%= response.answer_option.text %>
+                            <strong style="color: #111827;">Q{response.question.position}:</strong>
+                            {response.answer_option.label}. {response.answer_option.text}
                           </div>
                         <% end %>
                       </div>
@@ -115,18 +134,18 @@ defmodule StyleWeb.AdminLive.Reports do
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
           <div>
             <div style="font-size: 0.875rem; color: #6b7280;">Total Signups</div>
-            <div style="font-size: 1.5rem; font-weight: bold; color: #111827;"><%= length(@leads) %></div>
+            <div style="font-size: 1.5rem; font-weight: bold; color: #111827;">{length(@leads)}</div>
           </div>
           <div>
             <div style="font-size: 0.875rem; color: #6b7280;">Courses Opt-ins</div>
             <div style="font-size: 1.5rem; font-weight: bold; color: #111827;">
-              <%= Enum.count(@leads, & &1.opt_in_courses) %>
+              {Enum.count(@leads, & &1.opt_in_courses)}
             </div>
           </div>
           <div>
             <div style="font-size: 0.875rem; color: #6b7280;">All Comms Opt-ins</div>
             <div style="font-size: 1.5rem; font-weight: bold; color: #111827;">
-              <%= Enum.count(@leads, & &1.opt_in_all_communications) %>
+              {Enum.count(@leads, & &1.opt_in_all_communications)}
             </div>
           </div>
         </div>

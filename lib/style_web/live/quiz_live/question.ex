@@ -6,6 +6,7 @@ defmodule StyleWeb.QuizLive.Question do
   alias Style.Quiz.QuizResponse
   alias Style.Quiz.Session
   alias Style.Repo
+  alias Style.Services.ConvertKitSubscriber
   alias Ecto.Multi
 
   @impl true
@@ -154,7 +155,12 @@ defmodule StyleWeb.QuizLive.Question do
       end)
 
     case Repo.transaction(multi) do
-      {:ok, _results} ->
+      {:ok, %{lead: lead}} ->
+        # Subscribe to ConvertKit asynchronously (don't block on success/failure)
+        Task.start(fn ->
+          ConvertKitSubscriber.subscribe_lead(lead)
+        end)
+
         {:noreply, push_navigate(socket, to: ~p"/result/#{quiz_session.id}")}
 
       {:error, :lead, changeset, _changes} ->

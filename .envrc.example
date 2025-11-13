@@ -1,0 +1,24 @@
+# Environment variables for Style quiz application
+# Copy this file to .envrc and fill in your values
+# Then run: direnv allow
+
+# Phoenix configuration
+export PHX_HOST=localhost
+export PORT=4000
+export SECRET_KEY_BASE=your_secret_key_base_here
+
+# Database configuration
+# For local Postgres:
+export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/style_dev
+# For Neon or other hosted Postgres:
+# export DATABASE_URL=postgresql://user:password@host/database
+
+# ConvertKit (Kit) API configuration
+# Get your V4 API key from https://app.kit.com/account_settings (Developer tab)
+export KIT_API_KEY=your_kit_v4_api_key
+
+# Google Analytics (optional)
+export GA_TRACKING_ID=
+
+# Uncomment to enable Phoenix server on startup
+# export PHX_SERVER=true

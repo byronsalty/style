@@ -24,6 +24,10 @@ if config_env() == :prod do
   # Google Analytics 4 tracking ID for production
   config :style, ga_tracking_id: System.get_env("GA_TRACKING_ID")
 
+  # ConvertKit (Kit) API configuration
+  config :style,
+    convertkit_api_key: System.get_env("KIT_API_KEY")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

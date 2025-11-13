@@ -51,6 +51,7 @@ npm-debug.log
 .env
 .env.local
 .env.*.local
+.envrc
 
 # IDE
 .DS_Store

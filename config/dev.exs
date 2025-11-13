@@ -89,3 +89,7 @@ config :swoosh, :api_client, false
 
 # Google Analytics 4 tracking ID (optional for dev)
 config :style, ga_tracking_id: System.get_env("GA_TRACKING_ID")
+
+# ConvertKit (Kit) API configuration (optional for dev)
+config :style,
+  convertkit_api_key: System.get_env("KIT_API_KEY")
